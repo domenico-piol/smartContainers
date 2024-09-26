@@ -43,7 +43,9 @@ spec:
         - fetch-repository
       params:
         - name: DOCKERFILE
-          value: ./hf-model-dl/Containerfile
+          value: ./Containerfile
+        - name: CONTEXT
+          value: hf-model-dl
         - name: IMAGE
           value: $(params.container-repo)/hf-model-dl:$(context.pipelineRun.uid)
       workspaces:
