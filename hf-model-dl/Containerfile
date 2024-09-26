@@ -1,0 +1,19 @@
+FROM registry.access.redhat.com/ubi9/python-312
+
+USER root
+
+#RUN microdnf check-update; \
+#    microdnf install -y wget; \
+#    microdnf clean all
+RUN pip3 install --upgrade pip; \
+    python3 -m pip install -U "huggingface_hub[cli]";
+
+ADD dl.sh dl.sh
+
+RUN chgrp -R 0 /opt/app-root/src && \
+    chmod -R g+rwX /opt/app-root/src && \
+    chmod 774 /opt/app-root/src/dl.sh
+
+USER 1001
+
+ENTRYPOINT ["./dl.sh"]
