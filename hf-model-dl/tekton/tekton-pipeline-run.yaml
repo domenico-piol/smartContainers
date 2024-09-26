@@ -1,0 +1,23 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: hf-model-dl-pipeline-run
+spec:
+  pipelineRef:
+    name: hf-model-dl-pipeline
+  workspaces:
+    - name: shared-workspace
+      persistentvolumeclaim:
+        claimName: hf-model-dl-source-pvc
+    - name: dockerconfig-ws
+      secret:
+        secretName: dockerconfig-secret
+  params:
+    - name: repo-url
+      value: https://github.com/domenico-piol/smartContainers
+    - name: repo-branch
+      value: main
+    - name: container-repo
+      value: registry-1.docker.io/domenicopiol
+    - name: container-registry
+      value: docker.io
