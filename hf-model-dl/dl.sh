@@ -13,6 +13,8 @@ while getopts 'm:d:f:' flag; do
   esac
 done
 
-mkdir fb-bart-large-cnn
+mkdir -p $directory
 
 huggingface-cli download $model $files --local-dir $directory --local-dir-use-symlinks False
+
+ls -lsa $directory/*
