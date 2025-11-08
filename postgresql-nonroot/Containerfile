@@ -1,0 +1,13 @@
+FROM postgres:latest
+
+USER root
+
+RUN mkdir /db-data
+
+RUN groupadd non-root-postgres-group
+RUN useradd non-root-postgres-user --group non-root-postgres-group
+
+RUN chown -R non-root-postgres-user:non-root-postgres-group /db-data
+RUN chmod 777 /db-data
+
+USER non-root-postgres-user
