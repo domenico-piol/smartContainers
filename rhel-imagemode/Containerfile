@@ -1,0 +1,17 @@
+FROM registry.redhat.io/rhel10/rhel-bootc:latest
+
+RUN dnf -y install \
+    openssh-server \
+    && dnf clean all
+
+# Step 3: Configure the system or application
+RUN systemctl enable sshd
+
+# Step 4: Create a default domenico user and inject an SSH public key
+# (Replace the placeholder public key with your actual SSH key)
+RUN useradd -m -G wheel domenico && \
+    echo "domenico ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/domenico && \
+    mkdir -m 0700 -p /home/domenico/.ssh && \
+    echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC8rklFHG9PuveIQc92FDzw4f4ukcIPtacPNgzMgZzn4gh0X1MbB+znNgtqwLsBopo57D8F5dQwYobX8N0RGGSNGXLyQMH6NKHqOfQnkQOhgPnjTNYFUeTo+NeMlF5CyBVzjTJbPOGqE7iCa1oTH2O10VU1XTP0Z9KT8xYESRSCwI/T3MwZHntY1oMlzujB450qNw5yCOt6HIqRVmj4/5NSE2qAsjQAPiEiog8UPAz22AMKTMUpqboOVAvJlMTxyux7F4QS1qr8JgQpzbotkiOAETbZkdoDUvRcbAOBQ1ArC+gdIBacPS/yczNjZA/oOBNMb/V29DvQxa61gw/pt3WlvoKw+AzPQEtI0EIf9kSQPmFeEcylGGL4bDkO0O0bBJ/MtE5apkEcUp1opNjlyAYKLMgrEKyD+kPKZ85GJQuwH/EPR36vdCyitTiRuKCzg9QUlBtT8lhlN8VrjMvPTeysZM/CFb0jdg9xmPW+4AnI+cwveukf/f5sRdWKB45yff8= domenico@dpiol1-mac" > /home/domenico/.ssh/authorized_keys && \
+    chown -R domenico:domenico /home/domenico/.ssh && \
+    chmod 0600 /home/domenico/.ssh/authorized_keys
